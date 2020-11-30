@@ -1,0 +1,640 @@
+body {
+  font-family: "Roboto", sans-serif;
+  font-family: "Roboto", sans-serif;
+  background-color: #fbfbfb;
+}
+
+.navbar-item {
+  font-family: "Roboto", sans-serif;;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.navbar-item.active {
+  color: #f65959;
+  opacity: 1;
+}
+
+.myModal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.my-modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.myModalClose {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+.has-text-orange {
+  color: #f65959;
+}
+
+.centered {
+  width: 300px;
+  z-index: 15;
+  left: 50%;
+}
+
+.left-column {
+  max-width: 250px;
+}
+
+.right-column {
+  max-width: 200px;
+}
+
+table, td, th {
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  padding: 10px;
+}
+
+.mapTable {
+  margin-right:5em;
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+
+
+.showButtons {
+  opacity: 1;
+}
+
+.hideButtons {
+  opacity: 0.01;
+  display: inline-block;
+  padding: 0%;
+}
+
+.loginForm {
+  width: 50%;
+  height: 50%;
+  position: center;
+  margin-left: 25%;
+}
+
+.registerForm {
+  width: 50%;
+  height: 55%;
+  position: center;
+  margin-left: 25%;
+}
+
+.modalContent {  
+  margin-top: 10%;
+  margin-left: 30%;
+}
+
+.buttonsColumn {
+  border-color: white;
+  display: inline-block; 
+  padding: 13%;
+ 
+}
+
+.buttonsRow { 
+  height: 1px;
+  
+}
+
+.selectCell {   
+  height: 7px;  
+  padding: 10px;  
+}
+
+.hiddenSelectCell {   
+  opacity: 0.01;
+  display: inline-block;
+  padding: 0%; 
+}
+
+.selectRow {  
+  height: 2em;  
+}
+
+.stat { 
+  width: 10em;
+}
+
+.largeCheckbox{
+  width: 17px; 
+  height: 17px; 
+  padding-top: 2px;
+  position: center;
+  vertical-align: middle;
+}
+
+.buttonsTable {
+  border-color: white;
+  display: inline-block;
+  width: 20%;
+  text-align:center;
+}
+
+.selectTable {
+  border-color: white;
+  display: inline-block;
+  width: 40px;
+  text-align:center;
+}
+
+
+.statusDataTables{
+  display: inline-block;
+  width: 100%;
+}
+
+.ItemsTable {
+  /*border-color: grey;*/
+  display: inline-block;
+  width:95%;
+  text-align:center;
+}
+
+.viewTable {
+  margin-left:5em;
+  margin-right:5em;
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+  height: 600px;
+}
+
+.fixedHeight {
+  min-height: 100px;
+}
+
+.hero.is-orange.is-bold {
+  background-image: linear-gradient(
+          141deg,
+          #f65959 0,
+          #fb6a6a 71%,
+          #ff6c6c 100%
+  );
+}
+
+.addRowButton{
+float: left;
+width: 50%;
+
+}
+
+.deleteRowButton{
+  float: left;
+  width: 50%;
+
+}
+
+.component-action {
+  float: right;
+  margin-right:10px;
+}
+
+.param-input {
+  height: 30%;
+  width:30em;
+  font-family: "Roboto", sans-serif;
+}
+
+.left-menu {
+  margin-right:1em;
+  padding-left:17%;
+}
+
+.right-menu {
+  padding-right:15%;
+}
+
+.left-component {
+  float: left;
+  margin-left: 20%;
+}
+
+.vertical-center {
+  margin-top:10em;
+}
+
+.expandable {
+  width: auto;
+  min-width: 200px;
+  max-width: 80%;
+}
+
+.is-orange {
+  background-color: #f65959;
+  border-color: transparent;
+  color: #fff;
+}
+
+.aboutLifeText {
+  background-color: #f5f3f3;
+  border-color: grey;  
+}
+
+.btnClass {
+  font-size: 16px;
+ }
+
+.valid{
+  color: green;
+}
+
+.invalid{
+  color: darkred;
+}
+
+.button.is-orange {
+  background-color: red;
+  color: #fff;
+}
+
+.button.is-orange.is-outlined {
+  background-color: transparent;
+  border-color: #f65959;
+  color: #f65959;
+}
+
+.button.is-orange.is-outlined:hover {
+  background-color: #f65959;
+  border-color: transparent;
+  color: #fff;
+}
+.button.hasBorder{
+  border: 1px solid lightgrey;
+}
+
+a {
+  text-decoration: none;
+  color: #7c7c7c;
+}
+
+a.navbar-item:hover {
+  /*background-color: none;*/
+  color: #ff6c6c;
+}
+
+.navbar-end a.navbar-item {
+  margin-left: 2rem;
+}
+
+.navbar-item .tag {
+  background-color: #fff;
+  position: absolute;
+  top: -8px;
+  left: 100%;
+  margin-left: calc(-1rem + 2px);
+  margin-top: calc(1rem - 0px);
+}
+
+.tag.is-micro {
+  height: auto;
+  padding: 4px 4px 2px;
+  font-size: 0.5rem;
+  line-height: 1;
+}
+
+.minimal-feature-image {
+  position: relative;
+}
+
+.minimal-feature-image .main-image {
+  position: relative;
+  z-index: 2;
+  width: 90%;
+}
+
+.minimal-feature-image .image-bg {
+  position: absolute;
+  top: 10%;
+  left: -20%;
+  right: 0;
+  margin: 0 auto;
+  max-width: 1096px;
+  width: 120%;
+  z-index: 0;
+}
+
+.spacer {
+  display: block;
+  margin: 0;
+  padding: 0;
+  height: 0;
+  background: none;
+  border: none;
+}
+
+.spacer.is-1 {
+  height: 1rem;
+}
+
+code {
+  display: block;
+  color: #204d74;
+  white-space: pre-wrap;
+  background-color: #fff;
+}
+
+figure.image.is-grayscale {
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+  opacity: 0.15;
+}
+
+.footer {
+  background-color: #fff;
+  box-shadow: 0 0 0 2px #f5f5f5;
+}
+
+.input-res{
+  width: 100%;
+  max-width: 500px;
+  box-sizing: border-box;
+}
+
+details {
+  margin-bottom: 1rem;
+}
+
+/* Workflow UI */
+
+.component {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.visible {
+  display: block;
+}
+
+.noBreak {
+  white-space: nowrap;
+}
+
+.flowchart-operator {
+  border-radius: 3px;
+  border-color: #dbdbdb;
+  -webkit-box-shadow: 0 0 56px -10px rgba(0, 0, 0, 0.09);
+  -moz-box-shadow: 0 0 56px -10px rgba(0, 0, 0, 0.09);
+  box-shadow: 0 0 56px -10px rgba(0, 0, 0, 0.09);
+}
+.flowchart-operator.warning {
+  -webkit-animation: glow-warning 1s ease-in-out infinite alternate;
+  -moz-animation: glow-warning 1s ease-in-out infinite alternate;
+  animation: glow-warning 1s ease-in-out infinite alternate;
+  border: 1px solid darkgoldenrod;
+  opacity: 1;
+  /*ox-shadow: 0 0 10px darkgoldenrod;*/
+}
+
+.param-input.warning{
+  background-color: lightyellow;
+  border: 1px solid darkgoldenrod;
+  opacity: 1;
+}
+
+
+
+.disabledButton {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.pathDiv {
+  position: absolute;
+  top: 40em;
+  right: 500px;
+  bottom: 230px;
+  left: 420px;
+
+}
+
+
+.flowchart-operator.error {
+  -webkit-animation: glow-error 0.7s ease-in-out infinite alternate;
+  -moz-animation: glow-error 0.7s ease-in-out infinite alternate;
+  animation: glow-error 0.7s ease-in-out infinite alternate;
+  border:1px solid darkred;
+  /*box-shadow: 0 0 10px darkred;*/
+  opacity: 1;
+}
+
+.flowchart-link.error {
+  -webkit-animation: glow-error 0.7s ease-in-out infinite alternate;
+  -moz-animation: glow-error 0.7s ease-in-out infinite alternate;
+  animation: glow-error 0.7s ease-in-out infinite alternate;
+  border:1px solid darkred;
+  /*box-shadow: 0 0 10px darkred;*/
+  opacity: 1;
+}
+
+.yellow {
+  color: darkgoldenrod;
+}
+
+.red {
+  color: darkred;
+}
+
+.flowchart-operator .flowchart-operator-title {
+  padding: 3px 3px 3px 8px;
+}
+
+.flowchart-container {
+  width: 100%;
+  height: 700px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  border-radius: 10px;
+  background-color: #dddddd;
+  -webkit-box-shadow: 0 0 16px -3px rgba(0, 0, 0, 0.08);
+  -moz-box-shadow: 0 0 16px -3px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0 16px -3px rgba(0, 0, 0, 0.08);
+}
+
+.draggable-operator {
+  font-size: 90%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0.5px 5px 0.5px 5px;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 0.15rem;
+  cursor: grab;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-box-shadow: 0 0 16px -3px rgba(0, 0, 0, 0.08);
+  -moz-box-shadow: 0 0 16px -3px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0 16px -3px rgba(0, 0, 0, 0.08);
+  border-radius: 3px;
+  transition: 300ms;
+}
+
+.jGrowl {
+  z-index: 9999;
+  color: #d8d8d8;
+  font-size: 14px;
+  font-family: "Roboto", sans-serif;
+  position: fixed;
+}
+
+.jGrowl.center-right{
+  top: 10%;
+  width: 50%;
+  left: 80%;
+}
+
+.jGrowl-notification {
+  background-color: darkkhaki;
+  opacity: 0.9;
+  zoom: 1;
+  width: 250px;
+  padding: 10px;
+  margin: 10px;
+  text-align: left;
+  display: none;
+  border-radius: 5px;
+  min-height: 40px;
+}
+
+.ui-state-highlight {
+  border: 1px solid grey;
+  background: lightgoldenrodyellow;
+  color: black;
+}
+
+.info-operator {
+  display: inline-block;
+  padding: 25px 25px 25px 25px;
+  border: 1px solid #e0e0e0;
+  margin-left: 1rem;
+}
+
+
+.draggable-operator:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.mappingColumn {
+  display: inline-block;
+  vertical-align: top;
+  background-color: darkslategrey;
+}
+
+.inline{
+  display: inline-block;
+}
+
+.lower{
+  padding-top: 20px;
+}
+
+.user-icon{
+  display: inline-block;
+  padding-right: 2%;
+  width: 5%;
+  height: 2%;
+  font-size: 0.73em;
+}
+
+.user{
+  display: inline-block;
+  font-size: large;
+  margin-left: 7px;
+  size: 3x;
+}
+
+.fa-id-badge{
+  display: inline-block;    
+}
+
+.sep-user{
+  margin-left: 8px;
+  margin-right: 100px;
+}
+
+.centCol{
+  width: 1200px;
+  height: 1500px;
+}
+
+.videoContainer {
+  position: relative;
+  height: 0;
+  padding-top: 23.125%;
+  width: 50%;
+}
+
+.videoContainer iframe {
+  position: absolute;
+  top: 0; left: 0;
+  border: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.spinner {
+  font-size: 16px;
+  display: inline-block;
+  animation: spin 5s infinite linear;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes twist-up {
+  to {
+    transform: rotateX(360deg);
+  }
+}
+

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.4.1/jquery.jgrowl.min.css"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.4.1/jquery.jgrowl.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css"/>
+        <link rel="stylesheet" type="text/css" href="./static/css/style.css" media="screen"/>
+        <link rel="stylesheet" type="text/css" href="./static/css/flowchart.css" media="screen"/>
+
+        <link rel="stylesheet" type="text/html" href="'file:///C:\CSS\font-awesome.min.css'"/>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sniglet&display=swap"/>
+
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+        <script src="./static/js/flowchart.js"></script>
+        <script src="./static/js/Editor.js"></script>
+        <script src="./static/js/workflow.js"></script>
+        <link rel="icon" type="image/png" href="./static/images/Titan_logo.jpg"/>
+
+        <meta charset="UTF-8">
+        <meta http-equiv="Cache-Control" content="no-store"/>
+        <meta
+        http-equiv="Pragma" content="no-cache"/>
+        <!-- Prevents caching at the Proxy Server -->
+        <meta http-equiv="Expires" content="0"/>
+        <title>OntologyMapping</title>
+    </head>
+    <body>
+        <section class="hero is-orange is-bold">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title has-text-white center" id="title"></h1>
+                </div>
+            </div>
+        </section>
+        <div style="padding-left: 5em">
+            <br>
+            <div style="display:inline-block">
+                <label for="selectMainClass">Main Class</label>
+                <input id="inputMainClass">
+            </input>
+        </div>
+        <br>
+        <br>
+        <div id="updateHeaderDiv" class="control">
+            <a class="button is-primary is-small" id="setHeader">
+                Update header names
+            </a>
+            <a class="button is-dark is-small" id="generateMapping">
+                Download Data in RDF
+            </a>
+            <a class="button is-orange is-small" id="saveMapping">
+                Save Mapping
+            </a>
+        </div>
+        <div class="mapTable" id="headerTable"></div>
+        <br></body>
+</html></div></body></html><script>window.onload = function () { // Loading variables from parent window
+    let header = window.headerNames;
+    let splitHeader = header[0].split(',');
+    let headerTypes = window.headerTypes;
+    let resource = window.resource;
+    let mappingJson = window.mappingJson;
+    let ontologies = {};
+
+    // Function to create the Header table
+    function makeHeaderHTML(header) {
+        let result = "<table class='' border=1>";
+        result += "<tr>";
+        for (let i = 0; i < header.length; i++) {
+            let type = "<p contenteditable=\"true\" id='' class=columnType style='display: inline-block'>" + headerTypes[i] + "</p>";
+            let name = "<p contenteditable=\"true\" id='' class=columnName style='display: inline-block'>" + header[i] + "</p>";
+            let contenedor = "<div class='mappingColumn' style='vertical-align: top'>" + name + ' (' + type + ')' + "<div>";
+            let cell = "<td id='' class=firstRow style='background-color: darkslategrey'>" + contenedor + "</td>";
+            result += cell;
+        }
+        result += "</tr>";
+        result += "<tr id='secondRow'>";
+        for (let j = 0; j < header.length; j++) {
+            let cell2 = "<td id=''>" + "<label style='padding-left: 26px' for=\"selectClass\">Class Uri: </label>\n" + "<input  class='inputClassUri' id=\"inputClassUri\"> </input>" + "<br/>" + "<label for=\"inputPropertyUri\">Property Uri: </label>\n" + "<input class='inputPropertyUri' id=\"\"> </input>" + "</td>";
+            result += cell2;
+        }
+        result += "</tr>";
+        result += "</table>";
+        return result;
+    }
+
+    // Use function to create header table, add ids, and put the title and style
+    let splitHead = header[1] === undefined;
+    let createdHeader;
+
+    if (splitHead === true) {
+        createdHeader = makeHeaderHTML(splitHeader);
+    } else {
+        createdHeader = makeHeaderHTML(header);
+    }
+
+    let div = document.getElementById('headerTable');
+    div.innerHTML += createdHeader;
+
+    let rows = $('#headerTable').find("tr");
+    $(rows[0]).find('td').each(function (numCol) {
+        this.id = "R1Col" + numCol;
+    });
+    $(rows[1]).find('select').each(function (i) {
+        if (this.id === "selectClass") {
+            this.id = i / 2;
+        }
+    });
+
+    $("#title").text(window.ontoTitleString);
+    $(".firstRow").addClass('has-text-white');
+
+    // Gather changes in header names nd types, and update them in parent window
+    $("#setHeader").on('click', function () {
+        var headers = [];
+        let types = [];
+        for (let i = 0; i < window.headerNames.length; i++) {
+            headers.push($("#R1Col" + i)[0].children[0].children[0].textContent);
+            types.push($("#R1Col" + i)[0].children[0].children[1].textContent);
+        }
+        window.opener.$("#id-header_names").val(headers);
+        window.opener.$("#id-header_names").attr('placeholder', headers);
+        window.opener.$("#id-header_types").val(types);
+        window.opener.$("#id-header_types").attr('placeholder', types);
+        window.opener.$("#setData").click();
+    });
+
+    // Get values from parent window
+    let numColumns = window.opener.$("#id-numberOfColumns").val();
+    let numLines = window.opener.$("#id-numberOfLines").val();
+    let hasHeader = window.opener.$("#id-hasHeader").val();
+    let delimiter = window.opener.$("#id-delimiter").val();
+    let path = window.opener.$("#id-path").val();
+
+    // Load preexisting mapping
+    if (mappingJson.resource !== undefined) {
+        $.jGrowl.defaults.position = 'top-left';
+        $.jGrowl("Loading existing mapping...");
+        setTimeout(() => {
+            $("#inputMainClass").val(mappingJson.rows_mapping).trigger('change');
+            setTimeout(() => {
+                for (let column = 0; column < window.headerNames.length; column++) {
+                    let currentColumn = $(".columnName")[column].textContent;
+                    $(".inputClassUri")[column].value = mappingJson.columns_mapping[currentColumn].Class
+                    $(".inputPropertyUri")[column].value = mappingJson.columns_mapping[currentColumn].Property;
+                }
+            }, 1000);
+            $.jGrowl("Mapping loaded");
+        }, 2000);
+    }
+
+    // Sending uris to Api to Generate Mapping and download the response
+    $("#generateMapping").on('click', function () {
+        $.jGrowl.defaults.position = 'top-left';
+        $.jGrowl("Downloading...");
+        let data = gatherMapping();
+        // Sending Json to the API and get the response; then download it.
+        $.ajax({
+            url: `${
+                document.Url
+            }/api/v2/semantic/mapping/new`,
+            type: "POST",
+            data: JSON.stringify(data),
+            dataType: "text",
+            headers: {
+                "Authorization": 'Bearer ' + document.cookie
+            },
+            contentType: "application/download",
+            async: true,
+            statusCode: {
+                404: function () {
+                    console.log("404 not found!");
+                },
+                401: function () {
+                    console.log("401 not authenticated");
+                },
+                200: function () {
+                    console.log("200 ok");
+                }
+            },
+            complete: function (response) {
+                if (response.statusText === 'OK') {
+                    let blob = new Blob([response], {type: 'application/download'});
+                    let link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = "Tabular_to_RDF_.nt";
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                } else if (response.statusText === 'Unauthorized') {
+                    alert('User not identified! You must log in. Redirecting to main page');
+                    window.location.replace("./index.html");
+                }
+            }
+        })
+    });
+
+    // Gather Mapping
+    function gatherMapping() {
+        let mainClassLabel = $("#inputMainClass")[0].value
+        let columns = {};
+        for (let i = 0; i < window.headerNames.length; i++) {
+            let selectedClass = $(".inputClassUri")[i].value;
+            let selectedProperty = $(".inputPropertyUri")[i].value;
+            if (selectedProperty.value === '') {
+                $.jGrowl("Missing Property!");
+            } else {
+                let index = window.headerNames[i];
+                columns[index] = {
+                    Property: selectedProperty,
+                    Class: selectedClass
+                }
+            }
+        }
+        mappingJson = {
+            "resource": resource,
+            "rows_mapping": mainClassLabel,
+            "columns_mapping": columns
+        };
+        return mappingJson;
+    }
+
+    // Save Mapping for this Csv
+    $("#saveMapping").on('click', function () {
+        $.jGrowl.defaults.position = 'top-left';
+        $.jGrowl("Saving ontology mapping...");
+
+        mappingJson = gatherMapping();
+        let $flowchart = window.opener.$(".flowchart-container");
+        let opId = $flowchart.flowchart("getSelectedOperatorId");
+        let data = $flowchart.flowchart("getOperatorData", opId);
+
+        data.ontology_mapping = mappingJson;
+        $flowchart.flowchart("setOperatorData", opId, data);
+        $.jGrowl("ontology mapping saved");
+    });
+}</script>

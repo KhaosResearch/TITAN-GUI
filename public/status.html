@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.4.1/jquery.jgrowl.min.css"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.4.1/jquery.jgrowl.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css"/>
+        <link rel="stylesheet" type="text/css" href="./static/css/style.css" media="screen"/>
+        <link rel="stylesheet" type="text/css" href="./static/css/flowchart.css" media="screen"/>
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+        <script src="./static/js/flowchart.js"></script>
+        <script src="./static/js/Editor.js"></script>
+        <script src="./static/js/workflow.js"></script>
+        <script defer src="./static/js/statusWorkflow.js"></script>
+        <script src="./static/js/papaparse.min.js"></script>
+        <script src="https://code.jscharting.com/2.9.0/jscharting.js"></script>
+        <link rel="icon" type="image/png" href="./static/images/Titan_logo.jpg"/>
+
+    </head>
+
+    <body>
+        <iframe id="my_iframe" style="display:none;"></iframe>
+        <nav class="navbar has-shadow is-spaced" role="navigation" aria-label="main navigation">
+            <div class="container">
+                <div class="navbar-start">
+                    <div class="navbar-brand">
+                        <a class="navbar-item" href="#">
+                            <img alt="" class="image is-64x64" src="./static/images/wk-platform.svg"/>
+                        </a>
+                    </div>
+                </div>
+                <div class="navbar-end">
+                    <div class="navbar-menu">
+                        <a href="./index.html" class="navbar-item">Home</a>
+                        <a href="./Editor.html" class="navbar-item">Editor
+                            <span class="tag is-micro is-uppercase">Beta</span>
+                        </a>
+                        <a href="./about.html" class="navbar-item">About</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="flowchart">
+            <div class="modal">
+                <div class="modal-background"></div>
+                <div class="modal-content expandable">
+                    <div class="card" style='width:200em'>
+                        <div class="card-content">
+                            <div id="graphDiv" hidden>
+                                <label for="yAxis">Y axis:</label>
+                                <select name="yAxis" id="yAxis"></select>
+                                <span style="display:inline-block; width: 10px;"></span>
+
+                                <label for="xAxis">X axis:</label>
+                                <select name="xAxis" id="xAxis"></select>
+                                <span style="display:inline-block; width: 10px;"></span>
+
+                                <label for="graphType">Graph type:</label>
+                                <select name="graphType" id="graphType"></select>
+                            </div>
+                            <div id="chartDiv" style="width:100%; height:300px; margin:0 auto;" hidden></div>
+                            <button type="button" class="button is-dark is-small" id="editFile" hidden>Save and Run</button>
+                            <button type="button" class="button is-dark is-small" id="continueExecution" hidden>Continue
+                                                            Execution</button>
+                            <button type="button" class="button is-dark is-small" id="downloadComponentOutputs" hidden>Download Component Outputs</button>
+                            <div id="log" hidden>Component log:</div>
+                            <code class="content"></code>
+                            <div id="dataTables" class="statusDataTables"></div>
+                        </div>
+                    </div>
+                    <div class="graphCard" style='width:110%'></div>
+                </div>
+                <button id="closeModal" class="modal-close is-large button" aria-label="close"></button>
+            </div>
+        </div>
+        <div class="">
+            <section class="hero is-orange is-bold">
+                <div class="hero-body">
+                    <div class="">
+                        <h1 class="title has-text-white">Titan Status</h1>
+                        <h1 class="subtitle has-text-white">
+                            Have any question? Check out our FAQ.
+                        </h1>
+                    </div>
+                </div>
+            </section>
+            <section class="hero">
+                <div class="hero-body">
+                    <div class="columns">
+                        <div class="column is-2 left-column">
+                            <div class="draggable-operators"></div>
+                            <a class="button is-dark is-small" id="stopExecution" style="margin-left: 100px">
+                                Stop Execution</a>
+                        </div>
+                        <div class="column centCol">
+                            <div class="flowchart-container">
+                                <div class="control" style="margin-top: 350px">
+                                    <a id="new-flowchartStatus"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column is-2 right-column"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <footer class="footer">
+            <div class="container">
+                <div class="columns">
+                    <div class="column is-4">
+                        <div class="footer-description pt-10">
+                            <figure class="image is-grayscale">
+                                <img alt="" style="width: 128px" src="./static/images/wk-platform.svg"/>
+                            </figure>
+                            <hr/>
+                            Made by Khaos Research Group
+                        </div>
+                    </div>
+                    <div class="column is-6 is-offset-2">
+                        <div class="columns">
+                            <div class="column">
+                                <ul class="footer-column">
+                                    <li class="column-header">Links</li>
+                                    <li class="column-item">
+                                        <a href="./index.html">Home</a>
+                                    </li>
+                                    <li class="column-item">
+                                        <a href="./Editor.html">Editor</a>
+                                    </li>
+                                    <li class="column-item">
+                                        <a href="./about.html">About</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="column">
+                                <ul class="footer-column">
+                                    <li class="column-header">Terms</li>
+                                    <li class="column-item">
+                                        <a>Terms and conditions</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </body>
+
+</html>

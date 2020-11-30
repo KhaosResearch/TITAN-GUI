@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.4.1/jquery.jgrowl.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.4.1/jquery.jgrowl.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.1"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css" />
+    <link rel="stylesheet" type="text/css" href="./static/css/style.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="./static/css/flowchart.css" media="screen" />
+
+    <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+    <script src="./static/js/flowchart.js"></script>
+    <script src="./static/js/Editor.js"></script>
+    <script src="./static/js/workflow.js"></script>
+    <script src="./static/js/papaparse.min.js"></script>
+    <link rel="icon" type="image/png" href="./static/images/Titan_logo.jpg"/>
+    
+    <meta charset="UTF-8">
+    <title>TITAN framework</title>
+</head>
+
+<body>
+    <nav class="navbar has-shadow is-spaced" role="navigation" aria-label="main navigation">
+        <div class="navbar-start">
+            <i class="image fas fa-user user_icon" style="display: inline-block;"> </i>
+            <p id="username" class="user" style="display: inline-block;"></p>
+        </div> 
+        <div class="navbar-end" style="display: inline-block;">
+            <div class="navbar-menu">
+                <a href="./index.html" class="navbar-item" >Home</a>
+                <a href="./editor.html" class="navbar-item" >Editor
+                    <span class="tag is-micro is-uppercase">Beta</span></a>
+                <a href="./about.html" class="navbar-item" >About</a>
+                <a id="logoutBtn" class='navbar-item button is-white hasBorder inline is-orange'>Logout</a>
+            </div>
+        </div>  
+        
+        
+    </nav>
+    <div class="flowchart" style="width: 100vw">
+        <div class="modal">
+            <div class="modal-background"></div>
+            <div class="modal-content">
+                <div class="card">
+                    <div class="card-content">
+                        <code class="content"> </code>
+                    </div>
+                </div>
+            </div>
+            <button class="closeButton" aria-label="close"> </button>
+            <button id="closeModal" class="modal-close is-large" aria-label="close"> </button>
+        </div>
+    </div>
+    <section class="hero is-orange is-bold" style='height:10%'>
+        <div class="hero-body" >
+            <div class="container" >
+                <h1 class="title has-text-white">TITAN flow editor</h1>
+                <h1 class="subtitle has-text-white">
+                    Have any question? Check out our FAQ.
+                </h1>
+            </div>
+        </div>
+    </section>
+    <div class="">
+        <section class="hero undefined">
+            <div class="hero-body">
+                <div class="" id="wholeFlowchart">
+                    <div class="columns">
+                        <div>
+                            <a class="button is-dark is-small hasBorder hidden ref=" filesModalButton"
+                                id="filesModalButton" style="padding-left: 3%;" onClick={this.manageFiles} disabled
+                                hidden>Manage my Files</a>
+                            <div id="myModal" class="myModal">
+                                <div class="my-modal-content">
+                                    <span class="myModalClose">&times;</span>
+                                    <section class="hero undefined" style="padding-left: 45%;">File Management</section>
+                                    <br>
+                                    <p> Minio</p>
+                                    <br>
+                                    <p>My Files</p>
+                                    <br>
+                                    <a class="button is-dark is-small hasBorder" id="removeAllObjects">
+                                        removeAllObjects</a>
+                                    <br>
+                                    <div class="column-pair">
+                                        <div class="left-column" id="listObjects" style="float: left;">
+                                        </div>
+                                        <div class="right-column">
+                                            <a class="button is-dark is-small hasBorder" id="downloadObject"> Open
+                                                object in editor</a>
+                                            <a class="button is-dark is-small hasBorder" id="downloadObject">
+                                                downloadObject</a>
+                                            <a class="button is-dark is-small hasBorder" id="getObjectMetadata">
+                                                getObjectMetadata</a>
+                                            <a class="button is-dark is-small hasBorder" id="removeObject">
+                                                removeObject</a>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <hr class="spacer is-1" />
+                                    <div>
+                                        <label for="fileSelect" class="button is-orange is-small" id="importCsvBtn"
+                                            style="margin-right:3px">Import File</label>
+                                        <fieldset style="width: 100px">
+                                            <form id="loadCsv">
+                                                <input type="file" id="fileSelect" style="display: none" />
+                                                <label id=fileSelected>Nothing selected</label>
+                                                <progress id="progressBar" value="0" max="100"
+                                                    style="width:150px;"></progress>
+                                            </form>
+                                        </fieldset>
+                                    </div>
+                                    <hr class="spacer" />
+                                    <a class="button is-dark is-small hasBorder" id="uploadObject" disabled>
+                                        uploadObject</a>
+                                    <br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column left-menu">
+                            <label style="margin-left:37%"
+                                class="is-size-6 has-text-weight-semibold left-title">Workflow Actions</label>
+                            <hr class="spacer is-1" />
+                            <div class="field">
+                                <div class="control">
+                                    <a style="margin-right:3px"
+                                        class="button is-white is-small left-component hasBorder ">
+                                        <form id="jsonFile" name="jsonFile" enctype="multipart/form-data" method="post">
+                                            <label id='importWorkflowBtn'>Import workflow</label>
+                                            <label id="importedFileName"> </label>
+                                        </form>
+                                    </a>
+                                    <a class="button is-grey is-small hasBorder hidden" id="loadOntologies" disabled
+                                        style="margin-right:3px">
+                                        Import Ontologies</a>
+                                    <a class="button is-small is-light hasBorder" id="export" disabled>
+                                        See workflow Data</a>
+                                    <a class="button is-ghost is-small " id="execute" disabled>
+                                        Execute workflow</a>
+                                    <a class="button is-light is-small hasBorder" id="save" disabled>
+                                        Save workflow</a>
+                                    <!--
+                                    <a class="button is-light is-small hasBorder" id="checkConnections">
+                                        Check Connections</a>
+                                    -->
+                                    <a class="button is-small hasBorder" id="delete" style="color: lightcoral;"
+                                        disabled>
+                                        Delete selection</a>
+                                    <a class="button is-small hasBorder" id="startNew" style="color: lightcoral;">
+                                        Delete All</a>
+                                    <fieldset>
+                                        <form id="importWorkflow" class='left-component' hidden disabled>
+                                            <input type="file" id="workflowSelect" />
+                                            <br>
+                                            <button class="button is-small" type="button"
+                                                id="loadWorkflow">Load</button>
+                                        </form>
+                                    </fieldset>
+                                    <fieldset id="importOnto" style="margin-left: 105px" hidden disabled>
+                                        <form>
+                                            <input type="file" id="ontoFileSelect" />
+                                            <br>
+                                            <button class="button is-small" type="button"
+                                                onclick="doSubmitOnto()">Submit</button>
+                                        </form>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="spacer is-1" />
+                    <div class="columns columnsStyle">
+                        <div class="column is-2 left-column" style="display:inline-block">
+                            <br>
+                            <div style="position:relative" class="">
+                                <p class="is-size-6 has-text-weight-semibold">Catalog</p>
+                                <hr class="spacer is-1" />
+                                <input type="search" id="searchBar" class="input-res"
+                                    placeholder="Search in the catalog...">
+                                <hr class="spacer is-1" />
+                                <div class="draggable-operators">
+                                    <details class="det" style='padding-left:13px'>
+                                        <summary>Data Analysing</summary>
+                                        <div class="component" id="DataAnalysing"> </div>
+                                    </details>
+                                    <details class="det" style='padding-left:13px' open>
+                                        <summary>Data Collection</summary>
+                                        <div class="component" id="DataCollection"> </div>
+                                    </details>
+                                    <details class="det" style='padding-left:13px'>
+                                        <summary>Data Processing</summary>
+                                        <div class="component" id="DataProcessing"> </div>
+                                    </details>
+                                    <details class="det" style='padding-left:13px'>
+                                        <summary>Data Sink</summary>
+                                        <div class="component" id="DataSink"> </div>
+                                    </details>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column centCol ">
+                            <div class="flowchart-container " style="height:800px">
+                                <div class="control" style="margin-top: 350px">
+                                    <a class="button is-orange is-outlined is-rounded is-medium" id="new-flowchart">
+                                        <span class="icon">
+                                            <i class="fas fa-project-diagram"> </i>
+                                        </span>
+                                        <span>New canvas</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column is-2 right-column">
+                            <p class="is-size-6 has-text-weight-semibold">Properties</p>
+                            <hr class="spacer is-1" />
+                            <details id="details" open>
+                                <summary>Basic</summary>
+                                <hr class="spacer is-1" />
+                                <fieldset disabled>
+                                    <div class="field">
+                                        <label>Operator ID</label>
+                                        <div class="control">
+                                            <input id="operator-id" class="input" type="text" placeholder="" />
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <label>Name</label>
+                                        <div class="control">
+                                            <input id="operator-name" class="input" type="text" placeholder="" />
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </details>
+                            <hr class="spacer is-1" />
+                            <fieldset style="width: 100px">
+                                <form id="urlForm" class="hidden">
+                                    <button id="submitFileButton" class="button is-small" type="button"
+                                        onclick="doSubmit()" disabled>Process File from Url</button>
+                                    <progress id="progressBar" value="0" max="100" style="width:150px;"></progress>
+                                </form>
+                            </fieldset>
+                            <hr class="spacer" />
+                            <a class="button is-small hasBorder hi hidden" id="viewCsv">
+                                View Operator Content</a>
+                            <a class="button is-grey is-small hidden" id="ontoMapping" style="margin-right:3px">
+                                Ontology Mapping</a>
+                            <hr class="spacer is-1" />
+                            <details id="operator-parameters" class="noBreak" open>
+                                <summary>Parameters</summary>
+                                <form>
+                                    <br>
+                                    <div class="field" id="paramsField" disabled>
+                                        <div id="params" class="">
+                                        </div>
+                                        <hr class="spacer is-1" />
+                                        <div class="field">
+                                            <div id="updateDiv" class="control" hidden>
+                                                <button ref="" class="button is-dark is-small" id="setData" disabled>
+                                                    Update Parameters
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-4">
+                    <div class="footer-description pt-10">
+                        <figure class="image is-grayscale">
+                            
+                        </figure>
+                        <hr />
+                        Made by Khaos Research Group
+                    </div>
+                </div>
+                <div class="column is-6 is-offset-2">
+                    <div class="columns">
+                        <div class="column">
+                            <ul class="footer-column">
+                                <li class="column-header">Links</li>
+                                <li class="column-item">
+                                    <a href="../index.html">Home</a>
+                                </li>
+                                <li class="column-item">
+                                    <a href="../editor.html">Editor</a>
+                                </li>
+                                <li class="column-item">
+                                    <a href="../about.html">About</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <ul class="footer-column">
+                                <li class="column-header">Terms</li>
+                                <li class="column-item">
+                                    <a href="./#">Terms and conditions</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
+<script>
+    document.loadedFiles = [];
+
+    function doSubmit() {
+        let $flowchart = $(".flowchart-container");
+        let opId = $flowchart.flowchart("getSelectedOperatorId");
+        let data = $flowchart.flowchart("getOperatorData", opId);
+        let fileUrl = null;
+
+        
+       for(let param in data.parameters){
+            if(data.parameters[param].properties.name==='url'){
+                fileUrl = data.parameters[param].properties.value;
+            }
+        }        
+        
+
+        if (fileUrl === null) { alert('Url field is empty') } else {
+
+            $.jGrowl.defaults.position = 'center-right';
+            $.jGrowl("Processing File...");
+            $("#wholeFlowchart").addClass("disabledButton");
+
+            let delimiter = data.parameters[0].properties.value;            
+            let linesToShow = 50;
+            let tableFromCsv = [];
+            $.getJSON(`http://api.allorigins.win/get?url=${encodeURIComponent(fileUrl)}`, function (file) {                  
+                $('#output').html(file.contents);
+                console.log(fileUrl);
+                console.log(file.contents);
+
+                let rows = file.contents.match(/[^\r\n]+/g);
+                let localRows = rows.slice(0, linesToShow);
+                rows = [];
+                for (let row in localRows) {
+                    tableFromCsv.push(localRows[row].split(delimiter));
+                }                
+                // Save the file       
+                setTimeout(() => {
+                    let opPosition;
+                    for (let index in document.loadedFiles) {
+                        if (document.loadedFiles[index][0] !== undefined && document.loadedFiles[index][0] == opId) {
+                            opPosition = index;
+                            break;
+                        }
+                    }
+                    // If this operator was not saved
+                    if (opPosition == undefined) { 
+                        let opToSave = [];
+                        opToSave.push(opId);
+                        opToSave.push(tableFromCsv);
+                        document.loadedFiles.push(opToSave);
+                    } else {
+                        document.loadedFiles[opPosition].push(tableFromCsv);
+                    }
+
+                    $('#id-header_names').val(tableFromCsv[0]);
+                    $("#setData").trigger('click');
+                    $("#ontoMapping").removeAttr('disabled');
+                    $("#viewCsv").removeAttr('disabled');
+                    $.jGrowl("File submitted correctly!");
+                    $("#wholeFlowchart").removeClass('disabledButton');
+                })
+            })
+        }
+    }
+</script>
+<script>
+    $('#importCsvBtn').on("click", function () {
+        let text = $('#fileSelected')[0].innerText;
+    });
+    let fileContent = '';
+    $('#fileSelect').on("change", function (e) {
+        let file = $('#fileSelect')[0].files[0];
+
+        thisFileName = file.name;
+        fileName = thisFileName;
+        $('#fileSelected')[0].innerText = file.name;
+
+        $('#uploadObject').prop("disabled", false);
+        $('#uploadObject').attr('disabled', false);
+        $('#uploadObject').attr('disabled', 'disabled');
+        $('#uploadObject').removeAttr('disabled');
+
+        var reader = new FileReader();
+        reader.onload = function (event) {
+            fileContent = event.target.result;
+        };
+        reader.readAsText($('#fileSelect')[0].files[0]);
+    });    
+</script>

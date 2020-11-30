@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css"/>
+        <link rel="stylesheet" type="text/css" href="./static/css/style.css" media="screen"/>
+        <script src="./static/js/Editor.js"></script>
+        <link rel="icon" type="image/png" href="./static/images/Titan_logo.jpg"/>
+    </head>
+
+    <body>
+        <nav class="navbar has-shadow is-spaced" role="navigation" aria-label="main navigation">
+            <div class="navbar-end">
+                <div class="navbar-menu">
+                    <a href="./" class="navbar-item">Home</a>
+                    <a href="./editor.html" class="navbar-item">Editor
+                        <span class="tag is-micro is-uppercase">Beta</span>
+                    </a>
+                    <a href="./about.html" class="navbar-item">About</a>
+                    <a id="loginBtn" class='button is-white hasBorder btnClass is-orange' type="button" style="margin-left: 1cm;">Login & Signup</a>
+                </div>
+            </div>
+        </nav>
+        <section class="hero is-medium">
+            <div class="hero-body">
+                <div class="container">
+                    <div class="columns is-vcentered is-centered">
+                        <div class="column is-5">
+                            <h1 class="title has-text-orange is-spaced">
+                                Welcome to the Titan platform
+                            </h1>
+                            <h2 class="subtitle is-4">
+                                Titan is an innovating project for the design and creation of Big Data Workflows.
+                            </h2>
+                            <h2 class="subtitle is-5">
+                                Take advantage of the domain semantic capabilities, create Workflows and execute them under
+                                                            a distributed arquitecture powered
+                                                            by Apache Kafka and Apache Avro.
+                            </h2>
+                            <div class="field is-grouped is-grouped-multiline">
+                                <div class="control">
+                                    <a class="button is-orange is-medium" href="./about.html">About Titan</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column is-4">
+                            <div class="minimal-feature-image">
+                                <figure class="image">
+                                    <img class="main-image" src="./static/images/workflow.png" alt=""/>
+                                    <img class="image-bg is-hidden-mobile" src="./static/images/map.svg" alt=""/>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="hero is-medium">
+            <div class="hero-body">
+                <div class="container">
+                    <div class="columns is-centered">
+                        <div class="column is-9">
+                            <h2 class="subtitle is-5"></h2>
+                        </div>
+                    </div>
+                    <div class="columns is-centered is-vcentered">
+                        <div class="column is-2">
+                            <figure class="image is-3by2 is-grayscale">
+                                <img src="./static/images/kafka.svg" alt=""/>
+                            </figure>
+                        </div>
+                        <div class="column is-1"></div>
+                        <div class="column is-2">
+                            <figure class="image is-3by2 is-grayscale">
+                                <img src="./static/images/avro.svg" alt=""/>
+                            </figure>
+                        </div>
+                        <div class="column is-1"></div>
+                        <div class="column is-2">
+                            <figure class="image is-1by1 is-grayscale">
+                                <img src="./static/images/stardog.svg" alt=""/>
+                            </figure>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer class="footer">
+            <div class="container">
+                <div class="columns">
+                    <div class="column is-4">
+                        <div class="footer-description pt-10">
+                            <figure class="image is-grayscale">
+                                <img alt="" style="width: 128px" src="./static/images/wk-platform.svg"/>
+                            </figure>
+                            <hr/>
+                            Made by Khaos Research Group
+                        </div>
+                    </div>
+                    <div class="column is-6 is-offset-2">
+                        <div class="columns">
+                            <div class="column">
+                                <ul class="footer-column">
+                                    <li class="column-header">Links</li>
+                                    <li class="column-item">
+                                        <a href="./index.html">Home</a>
+                                    </li>
+                                    <li class="column-item">
+                                        <a href="./editor.html">Editor</a>
+                                    </li>
+                                    <li class="column-item">
+                                        <a href="./about.html">About</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="column">
+                                <ul class="footer-column">
+                                    <li class="column-header">Terms</li>
+                                    <li class="column-item">
+                                        <a href="./#">Terms and conditions</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </body>
+
+</html>
+<script>
+    $("#loginBtn").on("click", function () {
+        window.location.replace("./login.html");
+    });
+</script>

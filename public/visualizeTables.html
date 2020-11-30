@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css"/>
+        <link rel="stylesheet" type="text/css" href="./static/css/style.css" media="screen"/>
+        <link rel="stylesheet" type="text/css" href="./static/css/flowchart.css" media="screen"/>
+
+        <link rel="stylesheet" type="text/html" href="'file:///C:\CSS\font-awesome.min.css'"/>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sniglet&display=swap"/>
+
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+        <script src="./static/js/flowchart.js"></script>
+        <script src="./static/js/Editor.js"></script>
+        <script src="./static/js/workflow.js"></script>
+        <link rel="icon" type="image/png" href="./static/images/Titan_logo.jpg"/>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>ViewCsv</title>
+    </head>
+    <body>
+        <section class="hero is-orange is-bold">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title has-text-white center" id="title"></h1>
+                </div>
+            </div>
+        </section>
+        <br>
+        <br>
+        <div class="viewTable" id="csvTable"></div>
+    </body>
+</html>
+<script>
+    // When window loads
+    window.onload = function () { // Getting and logging variables from parent window
+        let Tables = window.tables;
+        let numColumns = window.numColumns;
+        let header = window.headerNames;
+
+        // Function to create HTML table from Csv
+        function makeTableHTML(parsedCsvTable) {
+            let result = "<table border=1>";
+            for (let i = 0; i < parsedCsvTable.length; i++) {
+                if (i === 0) {
+                    result += "<tr id='firstRow' class='firstRow' >";
+                } else {
+                    result += "<tr>";
+                }
+                for (let j = 0; j < numColumns; j++) {
+                    let cellValue = parsedCsvTable[i][j];
+                    if (i === 0) {
+                        result += "<td id='firstRow'  class='firstRow' style='background-color: darkslategrey'>" + cellValue + "</td>";
+                    } else {
+                        result += "<td >" + cellValue + "</td>";
+                    }
+                }
+                result += "</tr>";
+            }
+            result += "<br>" + "<br>" + "<br>";
+            result += "</table>";
+            return result;
+        }
+
+        // Loop through each table, create it and add it to the div
+        for (let table in Tables) {
+            let createdTable = makeTableHTML(Tables[table]);
+            document.getElementById('csvTable').innerHTML += createdTable;
+        }
+
+        // Add title to the window, make first row text white
+        $("#title").text(window.titleString);
+        $(".firstRow").addClass('has-text-white');
+    }
+</script>

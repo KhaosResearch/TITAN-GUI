@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.4.1/jquery.jgrowl.min.css"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.4.1/jquery.jgrowl.min.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css"/>
+        <link rel="stylesheet" type="text/css" href="./static/css/style.css" media="screen"/>
+        <link rel="stylesheet" type="text/css" href="./static/css/flowchart.css" media="screen"/>
+
+        <link rel="stylesheet" type="text/html" href="'file:///C:\CSS\font-awesome.min.css'"/>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sniglet&display=swap"/>
+
+
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+        <script src="./static/js/flowchart.js"></script>
+        <script src="./static/js/Editor.js"></script>
+        <script src="./static/js/axios.min.js"></script>
+        <script src="./static/js/workflow.js"></script>
+        <link rel="icon" type="image/png" href="./static/images/Titan_logo.jpg"/>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>ViewCsv</title>
+    </head>
+
+    <body>
+        <section class="hero is-orange is-bold">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title has-text-white center" id="title"></h1>
+                </div>
+            </div>
+        </section>
+        <div class="cssTable" id="statsTable"></div>
+        <br>
+        <br>
+        <br>
+        <div style="margin-left: 50px;" class="navbar-item aboutLifeText">
+            Editing temporarily disabled
+        </div>
+        <br>
+        <button style="margin-left: 7em;" type="button" class="button is-dark is-small" id="saveCsvFile" hidden disabled>Save
+                    Changes</button>
+        <button type="button" class="button is-orange is-small" id="filterSelected" hidden disabled>Filter selected</button>
+        <button type="button" class="button is-warning is-small" id="keepSelected" hidden disabled>Keep Selected</button>
+        <br>
+        <div class="viewTable" id="csvTable"></div>
+        <br>
+    </body>
+
+</html>
+<script>
+    // When window loads
+    window.onload = function () { // Getting variables from parent window
+        let clickedOpId = window.clickedOpId;
+        let parsedCsvTable = window.tableFromCSV;
+        let numColumns = window.numColumns;
+        let header = window.headerNames;
+        let hasHeader = window.hasHeader;
+        let fileUrl = window.minioPath;
+
+        // Adding the header. If hasHeader, get rid of first row (papa wont recognize var hasHeader)
+        parsedCsvTable.unshift(header);
+        if (hasHeader === 'true') {
+            parsedCsvTable.shift();
+        }
+
+        // Function to create HTML table from Csv
+        function makeHTMLTables(parsedCsvTable) {
+
+            let result = "<table class='selectTable' id='selectTable' >";
+            for (let i = 0; i < parsedCsvTable.length; i++) {
+
+                result += "<tr class='selectRow' >" + "<td class='selectCell' >" + "<div class='hideButtons'>" +
+                // "<button class='addRowButton' id='addRowButton' >" + '\+' + "</button>" +
+                // "<button class='deleteRowButton' id='deleteRowButton' >" + '\+' + "</button>" +
+                "<input type='checkbox' id='checkbox' class='largeCheckbox' value='selected'>" + "</div>" + "</td>" + "</tr>";
+                // "<input type='checkbox' id='vehicle1' name='vehicle1' value='Bike'>"+
+            }result += "</table>";
+
+            result += "<table id='ItemsTable' class='ItemsTable' border=1>";
+            for (let i = 0; i < parsedCsvTable.length; i++) {
+                if (i === 0) {
+                    result += "<tr id='firstRow'>";
+                } else {
+                    result += "<tr>";
+                }
+                for (let j = 0; j < numColumns; j++) {
+                    let cellValue = parsedCsvTable[i][j];
+                    if (i === 0) { // removed contenteditable for titan
+                        result += "<td id=firstRow style='background-color: darkslategrey' >" + cellValue + "</td>";
+                    } else { // removed contenteditable for titan
+                        result += "<td >" + cellValue + "</td>";
+                    }
+                }
+                result += "</tr>";
+            }
+            result += "</table>";
+
+            // Give time to create the table
+            setTimeout(() => {
+                let arr = [];
+                $("#ItemsTable tr").each(function () {
+                    arr.push($(this).find("td:first").text());
+                });
+
+                // Some features are unavailable at this time
+
+                // $("#ItemsTable tr").find("td:first").toggle();
+
+                // Show Buttons when hovering File rows
+                /*  $("#ItemsTable tr").hover(
+                    function () {
+                        $("#selectTable")[0].firstChild.childNodes[$(this).index()].firstChild.childNodes[0].classList.remove('hideButtons');
+                    },
+                    function () {
+                        $("#selectTable")[0].firstChild.childNodes[$(this).index()].firstChild.childNodes[0].classList.add('hideButtons');
+                    }
+                );*/
+                /*
+                $("#ItemsTable tr").on('mouseenter mouseleave', function (e) {
+                    sltTable = document.getElementById("selectTable");
+                    if (!sltTable.rows[this.rowIndex].firstChild.firstChild.firstChild.checked) { // Sólo si no esta checked, se oculta                        
+                        if (e.type == 'mouseenter') {
+                            $("#selectTable")[0].firstChild.childNodes[$(this).index()].firstChild.childNodes[0].classList.remove('hideButtons');
+                        } else {
+                            $("#selectTable")[0].firstChild.childNodes[$(this).index()].firstChild.childNodes[0].classList.add('hideButtons');
+                        }
+                    }
+                });
+
+                $("#selectTable tr").on('mouseenter mouseleave', function (e) {
+                    if (!this.firstChild.firstChild.firstChild.checked) {                        
+                        if (e.type == 'mouseenter') {
+                            $(this)[0].firstChild.childNodes[0].classList.remove('hideButtons');
+                        } else {
+                            $(this)[0].firstChild.childNodes[0].classList.add('hideButtons');
+                        }
+                    }
+                });
+
+                let selectedRows = [];
+                //  Track selected Rows
+                $(".largeCheckbox").on("click", function () {
+                    if (this.checked) {
+                        selectedRows.push(this.closest('tr').rowIndex);
+                    } else {
+                        if (selectedRows.includes(this.closest('tr').rowIndex)) {
+                            let indexOfIndex = selectedRows.indexOf(this.closest('tr').rowIndex);
+                            selectedRows.splice(indexOfIndex, 1);
+                        }
+                    }                    
+                });*/
+
+                let itemsTable = document.getElementById('ItemsTable');
+                let originalLength = itemsTable.rows.length;
+                // Delete all but selected Rows
+                /*
+                $("#keepSelected").on("click", function () {                    
+                    // Delete unselected rows from both tables                    
+                    for (var i = 0; i < itemsTable.rows.length; i++) {                       
+                        let row = itemsTable.rows[i];
+                        let rowInSelected = selectedRows.includes(i);                        
+                        if (!rowInSelected) {                            
+                            document.getElementById('ItemsTable').deleteRow(row.rowIndex);
+                            document.getElementById('selectTable').deleteRow(row.rowIndex);
+                        }
+                    }                    
+                    if (itemsTable.rows.length !== selectedRows.length) {
+                        $("#keepSelected").trigger('click');
+                    }
+                });
+
+                //  Delete selected Rows from both tables
+                $("#filterSelected").on("click", function () {
+                    for (var i = 0; i < itemsTable.rows.length; i++) {
+                        let row = itemsTable.rows[i];
+                        let rowInSelected = selectedRows.includes(i);
+                        if (rowInSelected) {                            
+                            document.getElementById('ItemsTable').deleteRow(row.rowIndex);
+                            document.getElementById('selectTable').deleteRow(row.rowIndex);
+                        }
+                    }                    
+                });*/
+            }, 1000); // 1000
+            return result;
+        }
+
+        // Create the table and add it to the div
+        parsedCsvTable.pop();
+        let createdTable = makeHTMLTables(parsedCsvTable);
+        document.getElementById('csvTable').innerHTML += createdTable;
+
+        // Add title to the window, make first row text white
+        $("#title").text(window.titleString);
+        $("#firstRow").addClass('has-text-white');
+
+        // Getting variables from parent window
+        let numLines = parsedCsvTable.length;
+        let MinIOPath = fileUrl;
+
+        // Create stats table
+        let statsTable = "<table>" + "<tr>" + "<td class=stat style='background-color: darkslategrey'>Number of Columns</td>" + "<td>" + numColumns + "</td>" + "</tr>" + "<tr>" + "<td class=stat style='background-color: darkslategrey'>Number of Lines</td>" + "<td>" + numLines + "</td>" + "</tr>" + "<tr>" + "<td class=stat style='background-color: darkslategrey'>MinIO Path</td>" + "<td>" + MinIOPath + "</td>" + "</tr>" + "</table>";
+
+        // Add it to the div
+        document.getElementById('statsTable').innerHTML += statsTable;
+
+        // Add title to the window, make first row text white
+        $("#title").text(window.statsTitleString);
+        $('[class=stat]').addClass('has-text-white');
+    }
+
+
+    // Save Csv changes button click
+    /*
+    let csvTable = null;
+    let outTopic = null;
+    let editedTable = null;
+    $("#saveCsvFile").on("click", function () {        
+        var myTableArray = [];
+        $("#csvTable tr").each(function () {            
+            let arrayOfThisRow = [];
+            let tableData = $(this).find('td');
+            if (tableData.length > 0) {
+                tableData.each(function () {
+                    if ($(this).text() === "") {
+                        console.log('has empty fields');
+                    } else {
+                        arrayOfThisRow.push($(this).text());
+                    }
+                });
+                console.log(arrayOfThisRow.length > 0 === true);
+                if (arrayOfThisRow.length > 0 === true) {
+                    myTableArray.push(arrayOfThisRow);
+                }
+
+            }
+        });        
+        let formatedTable = [];
+        for (let fila in myTableArray) {
+            formatedTable.push(myTableArray[fila].join().toString() + '\n');
+        }
+        var blob = new Blob(formatedTable, { type: 'application/octet-stream' });       
+
+        $.jGrowl.defaults.position = 'center-right';
+        $.jGrowl("Submitting File...");
+        $("#wholeFlowchart").addClass("disabledButton");
+
+        let randomName = 'File' + Date.now();        
+        let formData = new FormData();
+        
+        setTimeout(() => {            
+            formData.set("file", blob, randomName);
+            editedTable = myTableArray;
+            // Display the key/value pairs            
+            for (var pair of formData.entries()) {
+                console.log(pair[0] + ', ' + pair[1]);
+            }
+            axios({
+                method: 'post',
+                url: `${document.Url}/v2/hdfs`,
+                data: formData,
+                processData: false,
+                config: { headers: { 'Content-Type': 'multipart/form-data' } }
+            })
+                .then(function (response) {
+                    let Data = response.data;
+                    window.opener.newUrls.push(clickedOpId) // Add opId
+                    window.opener.newUrls[clickedOpId].push(Data.hdfs_path) // Add url to this opId
+                   
+                    $.jGrowl.defaults.position = 'center-right';
+                    $.jGrowl("File correctly submitted");
+                    $("#wholeFlowchart").removeClass("disabledButton");
+                })
+        }, 2000);
+    })
+*/
+
+    // Hide / Disable csv editing in view.csv
+    // $('#selectTable').hide();
+</script>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css"/>
+
+        <link rel="stylesheet" type="text/css" href="./static/css/flowchart.css" media="screen"/>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sniglet&display=swap"/>
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.4.1/jquery.jgrowl.min.css"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.4.1/jquery.jgrowl.min.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="./static/css/style.css" media="screen"/>
+        <link rel="stylesheet" type="text/css" href="./static/css/login_style.css" media="screen"/>
+        <link rel="stylesheet" type="text/css" href="./static/css/flowchart.css" media="screen"/>
+
+        <meta charset="UTF-8">
+        <link type="text/css" rel="stylesheet" id="dark-mode-general-link">
+        <link type="text/css" rel="stylesheet" id="dark-mode-custom-link">
+        <link rel="icon" type="image/png" href="./static/images/Titan_logo.jpg"/>
+        <style type="text/css" id="dark-mode-custom-style"></style>
+        <title></title>
+    </head>
+
+    <body>
+        <div>
+            <div class="auth-wrapper" style="margin-left: 85%;"></div>
+        </div>
+        <nav class="navbar has-shadow is-spaced" role="navigation" aria-label="main navigation">
+            <div class="container">
+                <div class="navbar-start" style="margin-right: 200%;">
+                    <div class="navbar-brand">
+                        <a class="navbar-item" href="..#">
+
+                            <hr/>
+                        </a>
+                    </div>
+                </div>
+                <div class="navbar-end" style="float:right">
+                    <div class="navbar-menu" style="float:right">
+                        <a href="./" class="navbar-item" style="float:right">Home</a>
+
+                        <a href="./about.html" class="navbar-item">About</a>
+
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="login-page">
+            <div class="form">
+                <form class="register-form">
+                    <input id='register_username' type="text" placeholder="username"/>
+                    <input id='register_fullname' type="text" placeholder="fullname"/>
+                    <input id='register_password' type="password" placeholder="password"/>
+                    <input id='register_email' type="text" placeholder="email address"/>
+                    <button id="sendRegisterForm" onclick="return false">create</button>
+                    <p class="message">Already registered?
+                        <a id="signIn">Sign In</a>
+                    </p>
+                </form>
+                <form class="login-form">
+                    <input id="login_username" type="text" placeholder="username"/>
+                    <input id="login_password" type="password" placeholder="password"/>
+                    <button id="sendLoginForm" onclick="return false">login</button>
+                    <p class="message">Not registered?
+                        <a href="#">Create an account</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 5cm;"></div>
+        <br>
+        <footer class="footer">
+            <div class="container" style="float: left;">
+                <div class="columns">
+                    <div class="column is-4">
+                        <div class="footer-description pt-10">
+                            <figure class="image is-grayscale">
+                                <img alt="" style="width: 512px" src="./static/images/wk-platform.svg"/>
+                            </figure>
+                            <hr/>
+
+                        </div>
+                    </div>
+                    <div class="column is-6 is-offset-2">
+                        <div class="columns">
+                            <div class="column">
+                                <ul class="footer-column"></ul>
+                            </div>
+                            <div class="column">
+                                <ul class="footer-column"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </body>
+
+</html>
+<script>
+    $('.message a').click(function () {
+        $('form').animate({
+            height: "toggle",
+            opacity: "toggle"
+        }, "slow");
+    });
+
+    $("#sendLoginForm").on("click", function () {
+        let username = $('#login_username').val();
+        let password = $('#login_password').val();
+        let loginData = {
+            "username": username,
+            "password": password
+        }
+        $.ajax({
+            url: `http://192.168.213.60:8001/api/v2/auth/login`,
+            type: "POST",
+            data: loginData,
+            dataType: "application/x-www-form-urlencoded",
+            async: false,
+            statusCode: {
+                404: function () {
+                    console.log("404 not found");
+                },
+                401: function () {
+                    console.log("401 Invalid credentials");
+                },
+                200: function () {
+                    console.log("200 ok");
+                }
+            },
+            complete: function (response) {
+                if (response.statusText === 'OK') {
+                    jsonResponse = JSON.parse(response.responseText);
+                    document.cookie = '' + jsonResponse.access_token;
+                    window.location.replace("./editor.html");
+                } else if (response.statusText === 'Unauthorized') {
+                    alert('Invalid credentials! Please try again');
+                }
+            }
+        })
+    });
+
+    $("#sendRegisterForm").on("click", function () {
+        let username = $('#register_username').val();
+        let fullname = $('#register_fullname').val();
+        let email = $('#register_email').val();
+        let password = $('#register_password').val();
+
+        let registerData = {
+            "username": username,
+            "fullname": fullname,
+            "email": email,
+            "password": password
+        }
+        $.ajax({
+            url: `http://192.168.213.60:8001/api/v2/auth/register`,
+            type: "POST",
+            data: JSON.stringify(registerData),
+            dataType: "json",
+            async: false,
+            statusCode: {
+                404: function () {
+                    console.log("404 not found");
+                },
+                422: function () {
+                    console.log("422 Unprocessable entity");
+                },
+                200: function () {
+                    console.log("200 ok");
+                }
+            },
+            complete: function (response) {
+                if (response.statusText === 'OK') {
+                    $.jGrowl.defaults.position = 'top-left';
+                    $.jGrowl("User registered successfully");
+                    $('#signIn').trigger('click');
+                } else if (response.statusText === 'Unauthorized') {
+                    alert('error 401: Unauthorized');
+                }
+            }
+        })
+    });
+</script>
