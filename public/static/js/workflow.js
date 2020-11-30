@@ -915,14 +915,14 @@ $(document).on("click", "#new-flowchart", function () {
               });
             },
             success: function (d) {
-              var url = `./status.html` + "?" + "ticket_id" + "=" + workflow_id;
+              var url = `./status` + "?" + "ticket_id" + "=" + workflow_id;
               window.open(url, "_blank");
             },
             error: function (xhr, textStatus, error) {},
           });
         } else if (response.statusText === "Unauthorized") {
           alert("Your session has expired! redirecting to main page");
-          window.location.replace("./index.html");
+          window.location.replace("./");
         }
       },
     });
